@@ -45,15 +45,16 @@ def Jacobian(alpha,beta,x,L,m,q,t):
 def Lyapunov (alpha,beta,x,L,m,q,T):
     M=int(T**(2/3))
     Tm=np.identity(m)
-    for i in range(M):
+    for i in range(M,m*l,-1):
         J=Jacobian(alpha,beta,x,L,m,q,M-i)
         Tm=np.dot(Tm,J)
     U0=np.zeros((m,1))
     U0[0]=1
     L=np.dot(Tm,U0)
     Lt=(np.dot(Tm,U0)).transpose()
-    F=np.dot(Lt,L)
-    l=(max(np.linalg.eigvals(F)))/(2*M)
+    F=np.dot(L,Lt)
+    l=max(np.linalg.eigvals(F))/(2*M)
+ 
 
 
 
