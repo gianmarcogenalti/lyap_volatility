@@ -10,15 +10,6 @@ import numpy as np
 import pandas as pd
 import os
 
-x=[0.6,0.8,0.9,0.8,0.5,0.6,0.6,0.7,0.8,0.4,0.6,0.5,0.6,0.2,0.4,0.5,0.9]
-beta=np.matrix([[1,2,3,4],[2,3,5,12],[1,9,7,3]])
-alpha=np.array([10,2,23,2])
-L=2
-m=3
-t=6
-j=1
-q=2
-k=[]
 
 
 def Sigmoid_derivative(x):
@@ -43,9 +34,14 @@ def Jacobian(alpha,beta,x,L,m,q,t):
     return J
 
 def Lyapunov (alpha,beta,x,L,m,q,T):
+    ### T: tempo massimo considerato
+    ### L,m,q: parametri del modello
+    ### x : l'intera serie temporale
+    ### alfa e beta: coefficienti del modelllo presenti
+    ### nel loro paper per come sono definiti nella formula a fine di pag 7
     M=int(T**(2/3))
     Tm=np.identity(m)
-    for i in range(M,m*l,-1):
+    for i in range(M,m*L,-1):
         J=Jacobian(alpha,beta,x,L,m,q,M-i)
         Tm=np.dot(Tm,J)
     U0=np.zeros((m,1))
