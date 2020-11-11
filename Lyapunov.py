@@ -26,9 +26,10 @@ def Jacobian(alpha,beta,bias,x,L,m,q,t):
     for i in range(0,m):
         c=[]
         for j in range(0,q):
-          z=bias[j]+beta[:,j].dot(x[(t-m*L):(t):L])
-          der=float(tanh_x(z))
-          c.append(alpha[i]*der*beta[i,j])
+          #z=bias[j]+beta[:,j].dot(x[(t-m*L):(t):L])
+          #der=Sigmoid_derivative(z)
+          der=1
+          c.append(alpha[j]*der*beta[i,j])
         k.append(float(sum(c)))
     J = np.zeros((m,m))
     i,j = np.indices(J.shape)
@@ -47,6 +48,7 @@ def Lyapunov (alpha,beta,bias,x,L,m,q,T):
     Tm=np.identity(m)
     for i in range(M,30,-1):
         J=Jacobian(alpha,beta,bias,x,L,m,q,i)
+        print(J)
         Tm=np.dot(Tm,J)
     U0=np.zeros((m,1))
     U0[0]=1
