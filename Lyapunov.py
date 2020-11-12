@@ -26,9 +26,8 @@ def Jacobian(alpha,beta,bias,x,L,m,q,t):
     for i in range(0,m):
         c=[]
         for j in range(0,q):
-          #z=bias[j]+beta[:,j].dot(x[(t-m*L):(t):L])
-          #der=Sigmoid_derivative(z)
-          der=1
+          z=bias[j]+beta[:,j].dot(x[(t-m*L):(t):L])
+          der=Sigmoid_derivative(z)
           c.append(alpha[j]*der*beta[i,j])
         k.append(float(sum(c)))
     J = np.zeros((m,m))
