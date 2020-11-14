@@ -10,11 +10,7 @@ import tensorflow as tf
 import os
 
 def tanh_x(x_point):
-    x = tf.constant(x_point)
-    with tf.GradientTape() as g:
-      g.watch(x)
-      y = tf.math.tanh(x)
-    return g.gradient(y, x)
+    return 1-np.tanh(x_point)**2
 
 def Sigmoid_derivative(x):
     fun=1/(1+np.exp(x))
@@ -26,8 +22,8 @@ def Jacobian(alpha,beta,bias,x,L,m,q,t):
     for i in range(0,m):
         c=[]
         for j in range(0,q):
-          z=bias[j]+beta[:,j].dot(x[(t-m*L):(t):L])
-          der=Sigmoid_derivative(z)
+          z = bias[j]+beta[:,j].dot(x[(t-m*L):(t):L])
+          der=tanh_x(z)
           c.append(alpha[j]*der*beta[i,j])
         k.append(float(sum(c)))
     J = np.zeros((m,m))
@@ -45,14 +41,13 @@ def Lyapunov (alpha,beta,bias,x,L,m,q,T):
     ### nel loro paper per come sono definiti nella formula a fine di pag 7
     M=int(T**(2/3))
     Tm=np.identity(m)
-    for i in range(M,30,-1):
+    for i in range(M,m,-1):
         J=Jacobian(alpha,beta,bias,x,L,m,q,i)
-        print(J)
         Tm=np.dot(Tm,J)
     U0=np.zeros((m,1))
     U0[0]=1
     Lx=np.dot(Tm,U0)
     Lt=(np.dot(Tm,U0)).transpose()
     F=np.dot(Lx,Lt)
-    l=max(np.linalg.eigvals(F))/(2*M)
+    l=np.log(max(np.linalg.eigvals(F)))/(2*M)
     return l
