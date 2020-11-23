@@ -2,11 +2,11 @@ import numpy as np
 import tensorflow as tf
 import pandas as pd
 
-def sliding_window(vec, m, L): 
+def sliding_window(vec, m, L):
     n = len(vec)
-    slid_w = np.empty(m)
-    targets = np.empty(1)
-    for i in range(0,n-m*L,L):
+    slid_w = np.array(vec[0:m*L:L])
+    targets = np.array(vec[m*L])
+    for i in range(1,n-m*L,L):
         slid_w = np.vstack((slid_w,vec[i:i+m*L:L]))
         targets = np.append(targets,vec[i+m*L])
     return slid_w, targets
