@@ -11,7 +11,7 @@ from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler
 from lyap import lyapunov_coeff, sliding_window
 
 #%%%%%%%%%%% stock choice %%%%%%%%%%%%%%%%%%
-stock = 'CL=F'
+stock = 'VIX'
 df = pd.read_csv(stock+'.csv').dropna()#.loc[251:4265]
 df.index = np.arange(len(df))
 with open('goodness_'+stock+'.pkl', 'rb') as input:

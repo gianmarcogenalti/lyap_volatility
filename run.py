@@ -26,15 +26,15 @@ opt = tf.keras.optimizers.Adam()
 #%%%%%%%%%%% data scaling %%%%%%%%%%%%%%%%%%%
 scaler = MinMaxScaler()
 close = np.array(df['Close']).reshape(-1,1)
-close = scaler.fit_transform(close).T.reshape(-1)
-#close = (close/100).T.reshape(-1)
+#close = scaler.fit_transform(close).T.reshape(-1)
+close = (close/100).T.reshape(-1)
 #%%%%%%%%%%% metrics %%%%%%%%%%%%%%%%%%%%%%%%%
 models_goodness = dict()
 est_lyapunov = dict()
 # Dimensionality parameters
 L_ = [1,2]  # step granularity
 m_ = [4,6,8,10]  # window size
-q_ = [4,8,12]   # number of neurons
+q_ = [1,2,4,8,12]   # number of neurons
 for L in L_:
     for q in q_:
         for m in m_:
