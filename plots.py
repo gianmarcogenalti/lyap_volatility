@@ -1,3 +1,10 @@
+''' In this version of the script you can specify a stock and if the run.py script
+ have been previously called on that stock you can produce in the 'plots' folder
+ the plots of the estimated lyapunov coefficients for the various tuples (L,m,q)
+ and the relative losses. You can also specify a tuple (L,m,q) to see the FFNN fit
+ vs the real data'''
+stock = 'VIX'
+L,m,q = 1,4,1
 
 import pickle
 import pandas as pd
@@ -10,8 +17,6 @@ from tensorflow.keras.layers import Dense
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler
 from lyap import lyapunov_coeff, sliding_window
 
-#%%%%%%%%%%% stock choice %%%%%%%%%%%%%%%%%%
-stock = 'VIX'
 df = pd.read_csv(stock+'.csv').dropna()#.loc[251:4265]
 df.index = np.arange(len(df))
 with open('goodness_'+stock+'.pkl', 'rb') as input:
@@ -53,14 +58,12 @@ my_callbacks = [
     tf.keras.callbacks.TensorBoard(log_dir='./logs'),
 ]
 opt = tf.keras.optimizers.Adam()
-#%%%%%%%%%%% data scaling %%%%%%%%%%%%%%%%%%%
+
 scaler = MinMaxScaler()
 close = np.array(df['Close']).reshape(-1,1)
 close = scaler.fit_transform(close).T.reshape(-1)
 #close = (close/1000).T.reshape(-1)
-#%%%%%%%%%%% metrics %%%%%%%%%%%%%%%%%%%%%%%%%
 
-L,m,q = 2,10,4
 X, y = sliding_window(close, m, L)
 model = Sequential([
   Dense(q, activation='tanh', input_shape=(m,)),
